@@ -27,7 +27,11 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    const user = this.userService.findOne(+id);
+    if (!user) {
+      throw new Error(`User doesn\'t exist!`);
+    }
+    return user;
   }
 
   @Patch(':id')
