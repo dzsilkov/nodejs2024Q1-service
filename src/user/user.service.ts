@@ -1,56 +1,71 @@
-import { Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-import { CreateUserDto } from './dto/create-user.dto';
-import { DbService } from '@core/services/db.service';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { User } from '@models';
+import { DbService } from '@core/services/db.service';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { createUser } from '../helpers/helpers';
+import { plainToInstance } from 'class-transformer';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
   constructor(private dbService: DbService) {}
 
-  create(createUserDto: CreateUserDto) {
-    const date = new Date().getTime();
-    const user: User = {
-      id: uuidv4(),
-      ...createUserDto,
-      version: 1,
-      createdAt: date,
-      updatedAt: date,
-    };
-
+  async create(createUserDto: CreateUserDto) {
+    const user: User = await createUser(createUserDto);
     this.dbService.users.add(user.id, user);
-    console.table(this.dbService);
-    console.dir(this.dbService.users);
-    return 'This action adds a new user';
+    return plainToInstance<UserEntity, User>(UserEntity, user);
   }
 
   findAll() {
     const users = this.dbService.users.findMany();
-    console.log(users);
-    return `This action returns all user, ${users}`;
+    return plainToInstance<UserEntity, User[]>(UserEntity, users);
   }
 
   findOne(id: string) {
     const user = this.dbService.users.findOne(id);
-    console.log(user);
-    return `This action returns a #${id} user`;
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found.`);
+    }
+    return plainToInstance<UserEntity, User>(UserEntity, user);
   }
 
   remove(id: string) {
+    const user = this.dbService.users.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found.`);
+    }
     this.dbService.users.delete(id);
-    return `This action removes a #${id} user`;
+    return `User with ${id} removed`;
   }
 
-  updatePassword(id: string, { oldPassword, newPassword }: UpdatePasswordDto) {
+  async updatePassword(
+    id: string,
+    { oldPassword, newPassword }: UpdatePasswordDto,
+  ) {
     const user = this.dbService.users.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found.`);
+    }
+    const comparePassword = bcrypt.compareSync(oldPassword, user.password);
+
+    if (!comparePassword) {
+      throw new ForbiddenException('The old password is wrong');
+    }
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+
     const updatedUser = {
       ...user,
-      password: newPassword,
+      password: hashPassword,
       updatedAt: new Date().getTime(),
       version: user.version + 1,
     };
     this.dbService.users.add(id, updatedUser);
-    return `This action updated Password a #${id} user`;
+    return plainToInstance<UserEntity, User>(UserEntity, updatedUser);
   }
 }

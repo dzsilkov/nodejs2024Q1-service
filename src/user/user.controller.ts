@@ -6,6 +6,10 @@ import {
   Param,
   Delete,
   Put,
+  ValidationPipe,
+  ParseUUIDPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,7 +20,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
@@ -26,24 +30,21 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const user = this.userService.findOne(id);
-    if (!user) {
-      throw new Error(`User doesn\'t exist!`);
-    }
-    return user;
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return this.userService.findOne(id);
   }
 
   @Put(':id')
   update(
-    @Param('id') id: string,
-    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
   ) {
     return this.userService.updatePassword(id, updatePasswordDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.userService.remove(id);
   }
 }

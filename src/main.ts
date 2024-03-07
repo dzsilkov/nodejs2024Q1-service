@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpExceptionFilter } from './errors/http-exception-filter.class';
 
 const SWAGGER_API_TITLE = 'Home Library Service';
 const SWAGGER_API_DESCRIPTION = 'Home music library service';
@@ -10,6 +11,7 @@ const SWAGGER_API_ENDPOINT = 'doc';
 async function bootstrap() {
   const PORT = process.env.PORT || 4000;
   const app = await NestFactory.create(AppModule);
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle(SWAGGER_API_TITLE)
