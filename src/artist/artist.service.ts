@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { DbService } from '@core/services/db.service';
+import {plainToInstance} from 'class-transformer';
+import { Artist } from '@models';
+import { ArtistEntity } from './entities/artist.entity';
+import { createArtist } from '../helpers/helpers';
 
 @Injectable()
 export class ArtistService {
+  constructor(private dbService: DbService) {}
+
   create(createArtistDto: CreateArtistDto) {
-    return 'This action adds a new artist';
+    const artist: Artist = createArtist(createArtistDto);
+    this.dbService.artists.add(artist.id, artist);
+    return artist;
   }
 
   findAll() {
-    return `This action returns all artist`;
+    const artists = this.dbService.artists.findMany();
+    return artists;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} artist`;
+  findOne(id: string) {
+    const artist = this.dbService.artists.findOne(id);
+    if (!artist) {
+      throw new NotFoundException(`Artist with ID ${id} not found.`);
+    }
+    return artist;
   }
 
-  update(id: number, updateArtistDto: UpdateArtistDto) {
-    return `This action updates a #${id} artist`;
+  update(id: string, { name, grammy }: UpdateArtistDto) {
+    const artist = this.dbService.artists.findOne(id);
+    if (!artist) {
+      throw new NotFoundException(`Artist with ID ${id} not found.`);
+    }
+    console.log('UpdateArtistDto', name, grammy);
+    const updatedArtist = {
+      ...artist,
+      name: name ? name : artist.name,
+      grammy: grammy !== undefined ? grammy : artist.grammy,
+    };
+    this.dbService.artists.add(id, updatedArtist);
+    return updatedArtist;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artist`;
+  remove(id: string) {
+    const artist = this.dbService.artists.findOne(id);
+    if (!artist) {
+      throw new NotFoundException(`Artist with ID ${id} not found.`);
+    }
+    this.dbService.artists.delete(id);
+    return `Artist with ${id} removed`;
   }
 }
