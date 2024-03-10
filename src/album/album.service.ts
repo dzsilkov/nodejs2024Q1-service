@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { DbService } from '@core/services/db.service';
+import { Album } from '@models';
+import { createAlbum } from '../helpers/helpers';
 
 @Injectable()
 export class AlbumService {
+  constructor(private dbService: DbService) {}
+
   create(createAlbumDto: CreateAlbumDto) {
-    return 'This action adds a new album';
+    const album: Album = createAlbum(createAlbumDto);
+    this.dbService.albums.add(album.id, album);
+    return album;
   }
 
   findAll() {
-    return `This action returns all album`;
+    const albums = this.dbService.albums.findAll();
+    return albums;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} album`;
+  findOne(id: string) {
+    const album = this.dbService.albums.findOne(id);
+    if (!album) {
+      throw new NotFoundException(`Album with ID ${id} not found.`);
+    }
+    return album;
   }
 
-  update(id: number, updateAlbumDto: UpdateAlbumDto) {
-    return `This action updates a #${id} album`;
+  update(id: string, { name, year, artistId }: UpdateAlbumDto) {
+    const album = this.dbService.albums.findOne(id);
+    if (!album) {
+      throw new NotFoundException(`Album with ID ${id} not found.`);
+    }
+    const updatedAlbum = {
+      ...album,
+      name: name ? name : album.name,
+      year: year ? year : album.year,
+      artistId: artistId !== undefined ? artistId : album.artistId,
+    };
+    this.dbService.albums.add(id, updatedAlbum);
+    return updatedAlbum;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} album`;
+  remove(id: string) {
+    const album = this.dbService.albums.findOne(id);
+    if (!album) {
+      throw new NotFoundException(`Album with ID ${id} not found.`);
+    }
+    this.dbService.albums.delete(id);
+    return `Album with ${id} removed`;
   }
 }

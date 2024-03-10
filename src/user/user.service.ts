@@ -23,7 +23,7 @@ export class UserService {
   }
 
   findAll() {
-    const users = this.dbService.users.findMany();
+    const users = this.dbService.users.findAll();
     return plainToInstance<UserEntity, User[]>(UserEntity, users);
   }
 

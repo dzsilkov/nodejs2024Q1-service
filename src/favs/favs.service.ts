@@ -1,26 +1,86 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFavDto } from './dto/create-fav.dto';
-import { UpdateFavDto } from './dto/update-fav.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { DbService } from '@core/services/db.service';
+import { FavoritesResponseDto } from './dto/favorites-response-dto';
 
 @Injectable()
 export class FavsService {
-  create(createFavDto: CreateFavDto) {
-    return 'This action adds a new fav';
+  constructor(private dbService: DbService) {}
+
+  findAll(): FavoritesResponseDto {
+    return {
+      artists: this.dbService.artists.getFavorites(),
+      albums: this.dbService.albums.getFavorites(),
+      tracks: this.dbService.tracks.getFavorites(),
+    };
   }
 
-  findAll() {
-    return `This action returns all favs`;
+  addTrackToFavourites(id: string) {
+    const track = this.dbService.tracks.findOne(id);
+
+    if (!track) {
+      throw new UnprocessableEntityException(`Track with ID ${id} not found.`);
+    }
+
+    this.dbService.tracks.addToFavorites(id);
+    return track;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} fav`;
+  addArtistToFavourites(id: string) {
+    const artist = this.dbService.artists.findOne(id);
+
+    if (!artist) {
+      throw new UnprocessableEntityException(`Artist with ID ${id} not found.`);
+    }
+
+    this.dbService.artists.addToFavorites(id);
+    return artist;
   }
 
-  update(id: number, updateFavDto: UpdateFavDto) {
-    return `This action updates a #${id} fav`;
+  addAlbumToFavourites(id: string) {
+    const album = this.dbService.albums.findOne(id);
+
+    if (!album) {
+      throw new UnprocessableEntityException(`Album with ID ${id} not found.`);
+    }
+
+    this.dbService.albums.addToFavorites(id);
+    return album;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} fav`;
+  removeTrackFromFavourites(id: string) {
+    const track = this.dbService.tracks.findOne(id);
+
+    if (!track) {
+      throw new NotFoundException(`Track with ID ${id} not found.`);
+    }
+
+    this.dbService.tracks.removeFromFavorites(id);
+    return `Track with ${id} removed from favorites`;
+  }
+
+  removeArtistFromFavourites(id: string) {
+    const artist = this.dbService.artists.findOne(id);
+
+    if (!artist) {
+      throw new NotFoundException(`Artist with ID ${id} not found.`);
+    }
+
+    this.dbService.artists.removeFromFavorites(id);
+    return `Artist with ${id} removed from favorites`;
+  }
+
+  removeAlbumFromFavourites(id: string) {
+    const album = this.dbService.albums.findOne(id);
+
+    if (!album) {
+      throw new NotFoundException(`Album with ID ${id} not found.`);
+    }
+
+    this.dbService.albums.removeFromFavorites(id);
+    return `Album with ${id} removed from favorites`;
   }
 }

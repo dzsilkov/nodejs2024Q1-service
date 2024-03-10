@@ -1,12 +1,21 @@
 export class EntityMap<T> {
   private entity = new Map<string, T>();
+  private pFavoritesIds: string[] = [];
+
+  get favoritesIds(): string[] {
+    return this.pFavoritesIds;
+  }
 
   add(id: string, value: T): void {
     this.entity.set(id, value);
   }
 
-  findMany(): Array<T> {
+  findAll(): Array<T> {
     return [...this.entity.values()];
+  }
+
+  findMany(ids: Array<string>): Array<T> {
+    return ids.map((id) => this.findOne(id));
   }
 
   findOne(id: string): T | null {
@@ -16,8 +25,21 @@ export class EntityMap<T> {
   delete(id: string): boolean {
     if (this.entity.has(id)) {
       this.entity.delete(id);
+      this.removeFromFavorites(id);
       return true;
     }
     return false;
+  }
+
+  addToFavorites(id: string): void {
+    this.pFavoritesIds.push(id);
+  }
+
+  getFavorites(): Array<T> {
+    return this.findMany(this.favoritesIds);
+  }
+
+  removeFromFavorites(id: string): void {
+    this.pFavoritesIds = this.favoritesIds.filter((favId) => favId !== id);
   }
 }
