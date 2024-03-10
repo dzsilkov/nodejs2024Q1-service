@@ -1,6 +1,11 @@
+import { Observable, Subject } from 'rxjs';
+
 export class EntityMap<T> {
   private entity = new Map<string, T>();
   private pFavoritesIds: string[] = [];
+  private entityRemovedSource: Subject<string> = new Subject();
+  public entityRemoved: Observable<string> =
+    this.entityRemovedSource.asObservable();
 
   get favoritesIds(): string[] {
     return this.pFavoritesIds;
@@ -26,6 +31,7 @@ export class EntityMap<T> {
     if (this.entity.has(id)) {
       this.entity.delete(id);
       this.removeFromFavorites(id);
+      this.entityRemovedSource.next(id);
       return true;
     }
     return false;
@@ -41,5 +47,9 @@ export class EntityMap<T> {
 
   removeFromFavorites(id: string): void {
     this.pFavoritesIds = this.favoritesIds.filter((favId) => favId !== id);
+  }
+
+  forEach(fn: (entity: T) => void) {
+    this.entity.forEach(fn);
   }
 }

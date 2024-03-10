@@ -7,7 +7,10 @@ import { createTrack } from '../helpers/helpers';
 
 @Injectable()
 export class TrackService {
-  constructor(private dbService: DbService) {}
+  constructor(private dbService: DbService) {
+    this.subscribeAlbumRemoved();
+    this.subscribeArtistRemoved();
+  }
 
   create(createTrackDto: CreateTrackDto) {
     const track: Track = createTrack(createTrackDto);
@@ -51,5 +54,25 @@ export class TrackService {
     }
     this.dbService.tracks.delete(id);
     return `Track with ${id} removed`;
+  }
+
+  subscribeAlbumRemoved() {
+    this.dbService.albums.entityRemoved.subscribe((id) => {
+      this.dbService.tracks.forEach((track) => {
+        if (track.albumId === id) {
+          this.dbService.tracks.add(track.id, { ...track, albumId: null });
+        }
+      });
+    });
+  }
+
+  subscribeArtistRemoved() {
+    this.dbService.artists.entityRemoved.subscribe((id) => {
+      this.dbService.tracks.forEach((track) => {
+        if (track.artistId === id) {
+          this.dbService.tracks.add(track.id, { ...track, artistId: null });
+        }
+      });
+    });
   }
 }
