@@ -19,7 +19,13 @@
     "noFallthroughCasesInSwitch": false,
     "paths":  {
       "@models": ["./src/models/"],
-      "@core/*": ["./src/core/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@artist/*": ["./src/artist/*"],
+      "@album/*": ["./src/album/*"],
+      "@track/*": ["./src/track/*"],
+      "@user/*": ["./src/user/*"],
+      "@favs/*": ["./src/favs/*"],
+      "@helpers/*": ["./src/helpers/*"],
     }
   }
 }

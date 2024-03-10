@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { DbService } from '@core/services/db.service';
+import { DbService } from '@shared/services';
 import { Album } from '@models';
-import { createAlbum } from '../helpers/helpers';
+import { createAlbum } from '@helpers/helpers';
 
 @Injectable()
 export class AlbumService {

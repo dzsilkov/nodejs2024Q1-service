@@ -3,8 +3,8 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { DbService } from '@core/services/db.service';
 import { FavoritesResponseDto } from './dto/favorites-response-dto';
+import { DbService } from '@shared/services';
 
 @Injectable()
 export class FavsService {
@@ -22,7 +22,9 @@ export class FavsService {
     const track = this.dbService.tracks.findOne(id);
 
     if (!track) {
-      throw new UnprocessableEntityException(`Track with ID ${id} not found.`);
+      throw new UnprocessableEntityException(
+        `Track with id ${id} doesn't exist`,
+      );
     }
 
     this.dbService.tracks.addToFavorites(id);
@@ -33,7 +35,9 @@ export class FavsService {
     const artist = this.dbService.artists.findOne(id);
 
     if (!artist) {
-      throw new UnprocessableEntityException(`Artist with ID ${id} not found.`);
+      throw new UnprocessableEntityException(
+        `Artist with id ${id} doesn't exist`,
+      );
     }
 
     this.dbService.artists.addToFavorites(id);
@@ -44,7 +48,7 @@ export class FavsService {
     const album = this.dbService.albums.findOne(id);
 
     if (!album) {
-      throw new UnprocessableEntityException(`Album with ID ${id} not found.`);
+      throw new UnprocessableEntityException(`Album was not found.`);
     }
 
     this.dbService.albums.addToFavorites(id);
@@ -55,32 +59,32 @@ export class FavsService {
     const track = this.dbService.tracks.findOne(id);
 
     if (!track) {
-      throw new NotFoundException(`Track with ID ${id} not found.`);
+      throw new NotFoundException(`Track was not found.`);
     }
 
     this.dbService.tracks.removeFromFavorites(id);
-    return `Track with ${id} removed from favorites`;
+    return `Deleted successfully`;
   }
 
   removeArtistFromFavourites(id: string) {
     const artist = this.dbService.artists.findOne(id);
 
     if (!artist) {
-      throw new NotFoundException(`Artist with ID ${id} not found.`);
+      throw new NotFoundException(`Artist was not found.`);
     }
 
     this.dbService.artists.removeFromFavorites(id);
-    return `Artist with ${id} removed from favorites`;
+    return `Deleted successfully`;
   }
 
   removeAlbumFromFavourites(id: string) {
     const album = this.dbService.albums.findOne(id);
 
     if (!album) {
-      throw new NotFoundException(`Album with ID ${id} not found.`);
+      throw new NotFoundException(`Album with id ${id} doesn't exist`);
     }
 
     this.dbService.albums.removeFromFavorites(id);
-    return `Album with ${id} removed from favorites`;
+    return `Deleted successfully`;
   }
 }

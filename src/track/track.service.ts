@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { DbService } from '@core/services/db.service';
+import { DbService } from '@shared/services';
 import { Track } from '@models';
-import { createTrack } from '../helpers/helpers';
+import { createTrack } from '@helpers/helpers';
 
 @Injectable()
 export class TrackService {

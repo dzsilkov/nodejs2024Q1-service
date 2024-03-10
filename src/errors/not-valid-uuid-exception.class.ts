@@ -1,8 +1,8 @@
-import { HttpException } from '@nestjs/common/exceptions';
-import { HttpStatus } from '@nestjs/common';
+import { ParseUUIDPipe } from '@nestjs/common';
+import { ParseUUIDPipeOptions } from '@nestjs/common/pipes/parse-uuid.pipe';
 
-export class NotValidUuidException extends HttpException {
-  constructor(message: string) {
-    super(message, HttpStatus.BAD_REQUEST);
+export class NotValidUuidException extends ParseUUIDPipe {
+  constructor(options?: ParseUUIDPipeOptions) {
+    super(options);
   }
 }

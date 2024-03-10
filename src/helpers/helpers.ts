@@ -3,12 +3,12 @@ import {
   validate as uuidValidate,
   version as uuidVersion,
 } from 'uuid';
-import {Album, Artist, Track, User} from '@models';
-import { CreateUserDto } from '../user/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { CreateArtistDto } from '../artist/dto/create-artist.dto';
-import {CreateTrackDto} from '../track/dto/create-track.dto';
-import {CreateAlbumDto} from '../album/dto/create-album.dto';
+import { Album, Artist, Track, User } from '@models';
+import { CreateUserDto } from '@user/dto/create-user.dto';
+import { CreateArtistDto } from '@artist/dto/create-artist.dto';
+import { CreateTrackDto } from '@track/dto/create-track.dto';
+import { CreateAlbumDto } from '@album/dto/create-album.dto';
 
 export const uuidIsValid = (uuid: string): boolean => {
   return uuidValidate(uuid) && uuidVersion(uuid) === 4;

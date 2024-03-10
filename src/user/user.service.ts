@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { User } from '@models';
-import { DbService } from '@core/services/db.service';
+import { DbService } from '@shared/services';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { createUser } from '../helpers/helpers';
+import { createUser } from '@helpers/helpers';
 import { plainToInstance } from 'class-transformer';
 import { UserEntity } from './entities/user.entity';
 
@@ -30,7 +30,7 @@ export class UserService {
   findOne(id: string) {
     const user = this.dbService.users.findOne(id);
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found.`);
+      throw new NotFoundException(`User not found`);
     }
     return plainToInstance<UserEntity, User>(UserEntity, user);
   }
@@ -38,10 +38,10 @@ export class UserService {
   remove(id: string) {
     const user = this.dbService.users.findOne(id);
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found.`);
+      throw new NotFoundException(`User not found`);
     }
     this.dbService.users.delete(id);
-    return `User with ${id} removed`;
+    return `The user has been deleted`;
   }
 
   async updatePassword(
@@ -50,12 +50,12 @@ export class UserService {
   ) {
     const user = this.dbService.users.findOne(id);
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found.`);
+      throw new NotFoundException(`User not found`);
     }
     const comparePassword = bcrypt.compareSync(oldPassword, user.password);
 
     if (!comparePassword) {
-      throw new ForbiddenException('The old password is wrong');
+      throw new ForbiddenException('oldPassword is wrong');
     }
     const hashPassword = await bcrypt.hash(newPassword, 10);
 

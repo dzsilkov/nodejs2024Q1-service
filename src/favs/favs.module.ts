@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { FavsController } from './favs.controller';
-import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 @Module({
   controllers: [FavsController],
   providers: [FavsService],
-  imports: [CoreModule],
+  imports: [SharedModule],
 })
 export class FavsModule {}
