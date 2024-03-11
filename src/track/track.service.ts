@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { DbService } from '@shared/services';
+import { DbService } from '@db/db.service';
 import { Track } from '@models';
-import { createTrack } from '@helpers/helpers';
+import { createTrack } from '@shared/helpers';
 
 @Injectable()
 export class TrackService {
@@ -25,9 +25,6 @@ export class TrackService {
 
   findOne(id: string) {
     const track = this.dbService.tracks.findOne(id);
-    if (!track) {
-      throw new NotFoundException(`Track with ID ${id} not found.`);
-    }
     return track;
   }
 
@@ -48,12 +45,7 @@ export class TrackService {
   }
 
   remove(id: string) {
-    const track = this.dbService.tracks.findOne(id);
-    if (!track) {
-      throw new NotFoundException(`Track with ID ${id} not found.`);
-    }
-    this.dbService.tracks.delete(id);
-    return `Track with ${id} removed`;
+    return this.dbService.tracks.delete(id);
   }
 
   subscribeAlbumRemoved() {

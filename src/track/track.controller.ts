@@ -10,6 +10,8 @@ import {
   ParseUUIDPipe,
   Put,
   ValidationPipe,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -21,7 +23,17 @@ export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Post()
-  create(@Body(ValidationPipe) createTrackDto: CreateTrackDto) {
+  create(
+    @Body(
+      new ValidationPipe({
+        exceptionFactory: () =>
+          new BadRequestException(
+            'Bad request. Body does not contain required fields',
+          ),
+      }),
+    )
+    createTrackDto: CreateTrackDto,
+  ) {
     return this.trackService.create(createTrackDto);
   }
 
@@ -34,7 +46,11 @@ export class TrackController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.trackService.findOne(id);
+    const track = this.trackService.findOne(id);
+    if (!track) {
+      throw new NotFoundException(`Track with ID ${id} not found.`);
+    }
+    return track;
   }
 
   @Put(':id')
@@ -50,6 +66,10 @@ export class TrackController {
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.trackService.remove(id);
+    const removeTrack = this.trackService.remove(id);
+    if (!removeTrack) {
+      throw new NotFoundException(`Track with ID ${id} not found.`);
+    }
+    return `Track with ${id} removed`;
   }
 }

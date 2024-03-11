@@ -10,6 +10,8 @@ import {
   HttpCode,
   HttpStatus,
   Put,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -21,7 +23,17 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Post()
-  create(@Body(ValidationPipe) createArtistDto: CreateArtistDto) {
+  create(
+    @Body(
+      new ValidationPipe({
+        exceptionFactory: () =>
+          new BadRequestException(
+            'Bad request. Body does not contain required fields',
+          ),
+      }),
+    )
+    createArtistDto: CreateArtistDto,
+  ) {
     return this.artistService.create(createArtistDto);
   }
 
@@ -34,7 +46,11 @@ export class ArtistController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.artistService.findOne(id);
+    const artist = this.artistService.findOne(id);
+    if (!artist) {
+      throw new NotFoundException(`Artist with ID ${id} not found.`);
+    }
+    return artist;
   }
 
   @Put(':id')
@@ -50,6 +66,10 @@ export class ArtistController {
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.artistService.remove(id);
+    const removeArtist = this.artistService.remove(id);
+    if (!removeArtist) {
+      throw new NotFoundException(`Artist with ID ${id} not found.`);
+    }
+    return `Artist with ${id} removed`;
   }
 }

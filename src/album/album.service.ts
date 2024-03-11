@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { DbService } from '@shared/services';
+import { DbService } from '@db/db.service';
 import { Album } from '@models';
-import { createAlbum } from '@helpers/helpers';
+import { createAlbum } from '@shared/helpers';
 
 @Injectable()
 export class AlbumService {
@@ -23,11 +23,7 @@ export class AlbumService {
   }
 
   findOne(id: string) {
-    const album = this.dbService.albums.findOne(id);
-    if (!album) {
-      throw new NotFoundException(`Album with ID ${id} not found.`);
-    }
-    return album;
+    return this.dbService.albums.findOne(id);
   }
 
   update(id: string, { name, year, artistId }: UpdateAlbumDto) {
@@ -46,12 +42,7 @@ export class AlbumService {
   }
 
   remove(id: string) {
-    const album = this.dbService.albums.findOne(id);
-    if (!album) {
-      throw new NotFoundException(`Album with ID ${id} not found.`);
-    }
-    this.dbService.albums.delete(id);
-    return `Album with ${id} removed`;
+    return this.dbService.albums.delete(id);
   }
 
   subscribeArtistRemoved() {

@@ -2,19 +2,19 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './errors/http-exception-filter.class';
-import * as YAML from 'yaml';
+import * as yaml from 'yaml';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { SWAGGER_API_ENDPOINT } from '@shared/constants';
+import { DEFAULT_PORT, SWAGGER_API_ENDPOINT } from '@shared/constants';
 
-const swaggerYamlFilePath = join(process.cwd(), 'doc', 'api.yaml');
+const swaggerYamlFilePath = join(__dirname, '..', 'doc', 'api.yaml');
 
 async function bootstrap() {
-  const PORT = process.env.PORT || 4000;
+  const PORT = process.env.PORT || DEFAULT_PORT;
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter());
   const swaggerYamlFile = readFileSync(swaggerYamlFilePath, 'utf8');
-  const swaggerDocument = YAML.parse(swaggerYamlFile);
+  const swaggerDocument = yaml.parse(swaggerYamlFile);
 
   SwaggerModule.setup(SWAGGER_API_ENDPOINT, app, swaggerDocument);
 

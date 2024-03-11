@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { DbService } from '@shared/services';
+import { DbService } from '@db/db.service';
 import { Artist } from '@models';
-import { createArtist } from '@helpers/helpers';
+import { createArtist } from '@shared/helpers';
 
 @Injectable()
 export class ArtistService {
@@ -43,11 +43,6 @@ export class ArtistService {
   }
 
   remove(id: string) {
-    const artist = this.dbService.artists.findOne(id);
-    if (!artist) {
-      throw new NotFoundException(`Artist with ID ${id} not found.`);
-    }
-    this.dbService.artists.delete(id);
-    return `Artist with ${id} removed`;
+    return this.dbService.artists.delete(id);
   }
 }

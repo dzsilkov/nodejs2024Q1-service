@@ -4,7 +4,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { FavoritesResponseDto } from './dto/favorites-response-dto';
-import { DbService } from '@shared/services';
+import { DbService } from '@db/db.service';
 
 @Injectable()
 export class FavsService {
@@ -48,7 +48,9 @@ export class FavsService {
     const album = this.dbService.albums.findOne(id);
 
     if (!album) {
-      throw new UnprocessableEntityException(`Album was not found.`);
+      throw new UnprocessableEntityException(
+        `Album with id ${id} doesn't exist.`,
+      );
     }
 
     this.dbService.albums.addToFavorites(id);
@@ -81,7 +83,7 @@ export class FavsService {
     const album = this.dbService.albums.findOne(id);
 
     if (!album) {
-      throw new NotFoundException(`Album with id ${id} doesn't exist`);
+      throw new NotFoundException(`Album was not found.`);
     }
 
     this.dbService.albums.removeFromFavorites(id);

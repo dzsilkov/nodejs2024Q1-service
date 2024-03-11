@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Album, Artist, Track, User } from '@models';
-import { EntityMap } from '../../../db/entity-map.';
+import { EntityMap } from '@db/entity-map.';
 
 @Injectable()
 export class DbService {
@@ -8,15 +8,6 @@ export class DbService {
   private pAlbums = new EntityMap<Album>();
   private pArtists = new EntityMap<Artist>();
   private pTracks = new EntityMap<Track>();
-
-  private static instance?: DbService;
-
-  constructor() {
-    if (!DbService.instance) {
-      DbService.instance = this;
-    }
-    return DbService.instance;
-  }
 
   get users(): EntityMap<User> {
     return this.pUsers;

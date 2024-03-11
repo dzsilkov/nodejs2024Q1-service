@@ -25,7 +25,7 @@
       "@track/*": ["./src/track/*"],
       "@user/*": ["./src/user/*"],
       "@favs/*": ["./src/favs/*"],
-      "@helpers/*": ["./src/helpers/*"],
+      "@db/*": ["./src/db/*"],
     }
   }
 }

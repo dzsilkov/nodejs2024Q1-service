@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,7 +28,7 @@ export class UserController {
       new ValidationPipe({
         exceptionFactory: () =>
           new BadRequestException(
-            'Bad request. body does not contain required fields',
+            'Bad request. Body does not contain required fields',
           ),
       }),
     )
@@ -45,7 +46,11 @@ export class UserController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.userService.findOne(id);
+    const user = this.userService.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return user;
   }
 
   @Put(':id')
@@ -59,16 +64,13 @@ export class UserController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(
-    @Param(
-      'id',
-      new ParseUUIDPipe({
-        version: UUID_VERSION,
-        exceptionFactory: () =>
-          new BadRequestException('Bad request. userId is invalid (not uuid)'),
-      }),
-    )
-    id: string,
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.userService.remove(id);
+    const removeUser = this.userService.remove(id);
+
+    if (!removeUser) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return `User with ${id} removed`;
   }
 }

@@ -10,6 +10,8 @@ import {
   ValidationPipe,
   HttpCode,
   HttpStatus,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -21,7 +23,17 @@ export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   @Post()
-  create(@Body(ValidationPipe) createAlbumDto: CreateAlbumDto) {
+  create(
+    @Body(
+      new ValidationPipe({
+        exceptionFactory: () =>
+          new BadRequestException(
+            'Bad request. Body does not contain required fields',
+          ),
+      }),
+    )
+    createAlbumDto: CreateAlbumDto,
+  ) {
     return this.albumService.create(createAlbumDto);
   }
 
@@ -34,7 +46,11 @@ export class AlbumController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.albumService.findOne(id);
+    const album = this.albumService.findOne(id);
+    if (!album) {
+      throw new NotFoundException(`Album with ID ${id} not found.`);
+    }
+    return album;
   }
 
   @Put(':id')
@@ -50,6 +66,10 @@ export class AlbumController {
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.albumService.remove(id);
+    const removeAlbum = this.albumService.remove(id);
+    if (!removeAlbum) {
+      throw new NotFoundException(`Album with ID ${id} not found.`);
+    }
+    return `Album with ${id} removed`;
   }
 }
