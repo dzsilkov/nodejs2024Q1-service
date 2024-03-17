@@ -7,6 +7,7 @@ import { TrackModule } from '@track/track.module';
 import { AlbumModule } from '@album/album.module';
 import { FavsModule } from '@favs/favs.module';
 import { DbModule } from '@db/db.mobule';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DbModule } from '@db/db.mobule';
     TrackModule,
     AlbumModule,
     FavsModule,
+    ConfigModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
