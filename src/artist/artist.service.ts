@@ -1,48 +1,53 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { DbService } from '@db/db.service';
-import { Artist } from '@models';
-import { createArtist } from '@shared/helpers';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ArtistEntity } from '@artist/entities/artist.entity';
 
 @Injectable()
 export class ArtistService {
-  constructor(private dbService: DbService) {}
+  constructor(
+    @InjectRepository(ArtistEntity)
+    private artistRepository: Repository<ArtistEntity>,
+  ) {}
 
-  create(createArtistDto: CreateArtistDto) {
-    const artist: Artist = createArtist(createArtistDto);
-    this.dbService.artists.add(artist.id, artist);
-    return artist;
+  async create(createArtistDto: CreateArtistDto) {
+    const createArtist: ArtistEntity =
+      this.artistRepository.create(createArtistDto);
+    return await this.artistRepository.save(createArtist);
   }
 
-  findAll() {
-    const artists = this.dbService.artists.findAll();
+  async findAll() {
+    const artists = await this.artistRepository.find();
     return artists;
   }
 
-  findOne(id: string) {
-    const artist = this.dbService.artists.findOne(id);
+  async findOne(id: string) {
+    const artist = await this.artistRepository.findOne({ where: { id } });
     if (!artist) {
       throw new NotFoundException(`Artist with ID ${id} not found.`);
     }
     return artist;
   }
 
-  update(id: string, { name, grammy }: UpdateArtistDto) {
-    const artist = this.dbService.artists.findOne(id);
+  async update(id: string, { name, grammy }: UpdateArtistDto) {
+    const artist = await this.artistRepository.findOne({ where: { id } });
     if (!artist) {
       throw new NotFoundException(`Artist with ID ${id} not found.`);
     }
-    const updatedArtist = {
+    return await this.artistRepository.save({
       ...artist,
       name: name ? name : artist.name,
       grammy: grammy !== undefined ? grammy : artist.grammy,
-    };
-    this.dbService.artists.add(id, updatedArtist);
-    return updatedArtist;
+    });
   }
 
-  remove(id: string) {
-    return this.dbService.artists.delete(id);
+  async remove(id: string) {
+    const result = await this.artistRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Artist with ID ${id} not found.`);
+    }
+    return `Artist with ${id} removed`;
   }
 }

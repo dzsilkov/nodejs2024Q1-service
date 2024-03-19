@@ -11,7 +11,6 @@ import {
   HttpStatus,
   Put,
   BadRequestException,
-  NotFoundException,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -46,11 +45,7 @@ export class ArtistController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const artist = this.artistService.findOne(id);
-    if (!artist) {
-      throw new NotFoundException(`Artist with ID ${id} not found.`);
-    }
-    return artist;
+    return this.artistService.findOne(id);
   }
 
   @Put(':id')
@@ -66,10 +61,6 @@ export class ArtistController {
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const removeArtist = this.artistService.remove(id);
-    if (!removeArtist) {
-      throw new NotFoundException(`Artist with ID ${id} not found.`);
-    }
-    return `Artist with ${id} removed`;
+    return this.artistService.remove(id);
   }
 }

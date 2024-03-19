@@ -16,11 +16,13 @@ export class TrackEntity implements Track {
   name: string;
 
   @Column({
+    type: 'text',
     nullable: true,
   })
   artistId: string | null;
 
   @Column({
+    type: 'text',
     nullable: true,
   })
   albumId: string | null;

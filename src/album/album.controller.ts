@@ -46,11 +46,7 @@ export class AlbumController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const album = this.albumService.findOne(id);
-    if (!album) {
-      throw new NotFoundException(`Album with ID ${id} not found.`);
-    }
-    return album;
+    return this.albumService.findOne(id);
   }
 
   @Put(':id')
@@ -66,10 +62,6 @@ export class AlbumController {
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const removeAlbum = this.albumService.remove(id);
-    if (!removeAlbum) {
-      throw new NotFoundException(`Album with ID ${id} not found.`);
-    }
-    return `Album with ${id} removed`;
+    return this.albumService.remove(id);
   }
 }

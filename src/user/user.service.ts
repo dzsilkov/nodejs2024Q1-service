@@ -11,6 +11,7 @@ import { UserEntity } from './entities/user.entity';
 import { HASH_SALT_OF_ROUNDS } from '@shared/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ResponseUserDto } from '@user/dto/response-user.dto';
 
 @Injectable()
 export class UserService {
@@ -30,12 +31,18 @@ export class UserService {
       password: hashPassword,
     });
     const user = await this.userRepository.save(createUser);
-    return plainToInstance<UserEntity, CreateUserDto>(UserEntity, user);
+    return plainToInstance<ResponseUserDto, CreateUserDto>(
+      ResponseUserDto,
+      user,
+    );
   }
 
   async findAll() {
     const users = await this.userRepository.find();
-    return plainToInstance<UserEntity, UserEntity[]>(UserEntity, users);
+    return plainToInstance<ResponseUserDto, UserEntity[]>(
+      ResponseUserDto,
+      users,
+    );
   }
 
   async findOne(userId: string) {
@@ -43,7 +50,7 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
-    return plainToInstance<UserEntity, UserEntity>(UserEntity, user);
+    return plainToInstance<ResponseUserDto, UserEntity>(ResponseUserDto, user);
   }
 
   async remove(userId: string) {
@@ -72,6 +79,9 @@ export class UserService {
       ...user,
       password: hashPassword,
     });
-    return plainToInstance<UserEntity, UserEntity>(UserEntity, updatedUser);
+    return plainToInstance<ResponseUserDto, UserEntity>(
+      ResponseUserDto,
+      updatedUser,
+    );
   }
 }

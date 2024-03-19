@@ -18,7 +18,10 @@ export class AlbumEntity implements Album {
   @Column()
   year: number;
 
-  @Column()
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
   artistId: string | null;
 
   @CreateDateColumn()

@@ -1,4 +1,3 @@
-import { Track } from '@models';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class TrackEntity implements Track {
+export class FavsEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
