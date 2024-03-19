@@ -7,17 +7,35 @@ import { TrackModule } from '@track/track.module';
 import { AlbumModule } from '@album/album.module';
 import { FavsModule } from '@favs/favs.module';
 import { DbModule } from '@db/db.mobule';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // envFilePath: [__dirname + '/.env'],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('PG_HOST'),
+        port: configService.get<number>('PG_PORT'),
+        username: configService.get<string>('POSTGRES_USER'),
+        password: configService.get<string>('POSTGRES_PASSWORD'),
+        database: configService.get<string>('POSTGRES_DB'),
+        synchronize: true,
+        entities: [__dirname + '/**/*.entity{.js, .ts}'],
+      }),
+      inject: [ConfigService],
+    }),
     DbModule,
     UserModule,
     ArtistModule,
     TrackModule,
     AlbumModule,
     FavsModule,
-    ConfigModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

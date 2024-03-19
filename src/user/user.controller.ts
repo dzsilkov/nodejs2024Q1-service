@@ -11,7 +11,6 @@ import {
   HttpCode,
   HttpStatus,
   BadRequestException,
-  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -46,11 +45,7 @@ export class UserController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const user = this.userService.findOne(id);
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return user;
+    return this.userService.findOne(id);
   }
 
   @Put(':id')
@@ -66,11 +61,6 @@ export class UserController {
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const removeUser = this.userService.remove(id);
-
-    if (!removeUser) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return `User with ${id} removed`;
+    return this.userService.remove(id);
   }
 }
