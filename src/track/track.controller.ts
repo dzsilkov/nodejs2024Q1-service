@@ -46,11 +46,7 @@ export class TrackController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const track = this.trackService.findOne(id);
-    if (!track) {
-      throw new NotFoundException(`Track with ID ${id} not found.`);
-    }
-    return track;
+    return this.trackService.findOne(id);
   }
 
   @Put(':id')
@@ -66,10 +62,6 @@ export class TrackController {
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const removeTrack = this.trackService.remove(id);
-    if (!removeTrack) {
-      throw new NotFoundException(`Track with ID ${id} not found.`);
-    }
-    return `Track with ${id} removed`;
+    return this.trackService.remove(id);
   }
 }
