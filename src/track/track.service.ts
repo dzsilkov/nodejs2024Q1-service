@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { DbService } from '@db/db.service';
 import { Track } from '@models';
 import { createTrack } from '@shared/helpers';
 import { InjectRepository } from '@nestjs/typeorm';

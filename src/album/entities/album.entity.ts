@@ -3,9 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn, ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ArtistEntity } from '@artist/entities/artist.entity';
 
 @Entity()
 export class AlbumEntity implements Album {
@@ -19,10 +22,14 @@ export class AlbumEntity implements Album {
   year: number;
 
   @Column({
-    type: 'text',
     nullable: true,
   })
+  // @OneToOne(() => ArtistEntity, { onDelete: 'SET NULL' })
+  // @JoinColumn({ name: 'artistId' })
   artistId: string | null;
+
+  @ManyToOne(() => ArtistEntity, { onDelete: 'SET NULL' })
+  artist: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

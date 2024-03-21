@@ -6,7 +6,6 @@ import { ArtistModule } from '@artist/artist.module';
 import { TrackModule } from '@track/track.module';
 import { AlbumModule } from '@album/album.module';
 import { FavsModule } from '@favs/favs.module';
-import { DbModule } from '@db/db.mobule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -14,23 +13,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      // envFilePath: [__dirname + '/.env'],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('PG_HOST'),
-        port: configService.get<number>('PG_PORT'),
-        username: configService.get<string>('POSTGRES_USER'),
-        password: configService.get<string>('POSTGRES_PASSWORD'),
-        database: configService.get<string>('POSTGRES_DB'),
-        synchronize: false,
-        entities: [__dirname + '/**/*.entity{.js, .ts}'],
+        host: configService.get<string>('TYPEORM_HOST'),
+        port: configService.get<number>('TYPEORM_PORT'),
+        username: configService.get<string>('TYPEORM_USERNAME'),
+        password: configService.get<string>('TYPEORM_PASSWORD'),
+        database: configService.get<string>('TYPEORM_DATABASE'),
+        synchronize: configService.get<string>('MODE') === 'development',
+        entities: [__dirname + 'dist/**/*.entity{.ts,.js}'],
+        autoLoadEntities: true,
       }),
       inject: [ConfigService],
     }),
-    DbModule,
     UserModule,
     ArtistModule,
     TrackModule,

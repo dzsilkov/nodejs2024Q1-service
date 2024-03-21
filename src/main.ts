@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { DEFAULT_PORT, SWAGGER_API_ENDPOINT } from '@shared/constants';
 import { ConfigService } from '@nestjs/config';
 
-const swaggerYamlFilePath = join(__dirname, '..', 'doc', 'api.yaml');
+const swaggerYamlFilePath = join(__dirname, '..', '..', 'doc', 'api.yaml');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
