@@ -1,31 +1,31 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
+import { ArtistEntity } from '@artist/entities/artist.entity';
+import { AlbumEntity } from '@album/entities/album.entity';
+import { TrackEntity } from '@track/entities/track.entity';
 
 @Entity()
 export class FavsEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  name: string;
+  @Column('uuid')
+  userId: string;
 
-  @Column()
-  artistId: string | null;
+  @ManyToMany(() => ArtistEntity, { eager: true })
+  @JoinTable()
+  artists: ArtistEntity[];
 
-  @Column()
-  albumId: string | null;
+  @ManyToMany(() => AlbumEntity, { eager: true })
+  @JoinTable()
+  albums: AlbumEntity[];
 
-  @Column()
-  duration: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ManyToMany(() => TrackEntity, { eager: true })
+  @JoinTable()
+  tracks: TrackEntity[];
 }

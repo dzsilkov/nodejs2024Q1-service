@@ -8,5 +8,6 @@ import { TrackEntity } from '@track/entities/track.entity';
   controllers: [TrackController],
   providers: [TrackService],
   imports: [TypeOrmModule.forFeature([TrackEntity])],
+  exports: [TrackService],
 })
 export class TrackModule {}

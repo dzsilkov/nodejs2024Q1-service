@@ -19,8 +19,7 @@ export class ArtistService {
   }
 
   async findAll() {
-    const artists = await this.artistRepository.find();
-    return artists;
+    return await this.artistRepository.find();
   }
 
   async findOne(id: string) {

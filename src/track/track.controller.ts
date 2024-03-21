@@ -10,7 +10,6 @@ import {
   ParseUUIDPipe,
   Put,
   ValidationPipe,
-  NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
 import { TrackService } from './track.service';

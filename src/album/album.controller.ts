@@ -10,7 +10,6 @@ import {
   ValidationPipe,
   HttpCode,
   HttpStatus,
-  NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';

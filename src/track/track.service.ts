@@ -1,19 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { Track } from '@models';
-import { createTrack } from '@shared/helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TrackEntity } from '@track/entities/track.entity';
 
 @Injectable()
 export class TrackService {
-  // constructor(private dbService: DbService) {
-  //   this.subscribeAlbumRemoved();
-  //   this.subscribeArtistRemoved();
-  // }
-
   constructor(
     @InjectRepository(TrackEntity)
     private trackRepository: Repository<TrackEntity>,
@@ -60,24 +53,4 @@ export class TrackService {
     }
     return `Track with ${id} removed`;
   }
-
-  // subscribeAlbumRemoved() {
-  //   this.dbService.albums.entityRemoved.subscribe((id) => {
-  //     this.dbService.tracks.forEach((track) => {
-  //       if (track.albumId === id) {
-  //         this.dbService.tracks.add(track.id, { ...track, albumId: null });
-  //       }
-  //     });
-  //   });
-  // }
-  //
-  // subscribeArtistRemoved() {
-  //   this.dbService.artists.entityRemoved.subscribe((id) => {
-  //     this.dbService.tracks.forEach((track) => {
-  //       if (track.artistId === id) {
-  //         this.dbService.tracks.add(track.id, { ...track, artistId: null });
-  //       }
-  //     });
-  //   });
-  // }
 }

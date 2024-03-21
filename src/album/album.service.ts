@@ -18,9 +18,8 @@ export class AlbumService {
     return await this.albumRepository.save(createAlbum);
   }
 
-  findAll() {
-    const albums = this.albumRepository.find();
-    return albums;
+  async findAll() {
+    return await this.albumRepository.find();
   }
 
   async findOne(id: string) {
@@ -51,14 +50,4 @@ export class AlbumService {
     }
     return `Album with ${id} removed`;
   }
-
-  // subscribeArtistRemoved() {
-  //   this.dbService.artists.entityRemoved.subscribe((id) => {
-  //     this.dbService.albums.forEach((track) => {
-  //       if (track.artistId === id) {
-  //         this.dbService.albums.add(track.id, { ...track, artistId: null });
-  //       }
-  //     });
-  //   });
-  // }
 }

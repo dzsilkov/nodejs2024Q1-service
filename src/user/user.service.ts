@@ -15,10 +15,15 @@ import { ResponseUserDto } from '@user/dto/response-user.dto';
 
 @Injectable()
 export class UserService {
+  protected _userId = 'f042c92f-8f88-4839-ad13-a7f690a16fa1';
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
   ) {}
+
+  getUserId() {
+    return this._userId;
+  }
 
   async create(createUserDto: CreateUserDto) {
     const hashPassword = await hash(
