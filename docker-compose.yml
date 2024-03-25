@@ -13,9 +13,11 @@ services:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - nestjs-network
 
-  app:
-    container_name: app
+  main:
+    container_name: main
     build:
       context: .
       dockerfile: Dockerfile-app
@@ -27,11 +29,16 @@ services:
 
     ports:
       - ${PORT}:${PORT}
-      - 9229:9229
-    command: npm run start:dev
     depends_on:
       - postgres
     restart: always
 
+    networks:
+      - nestjs-network
+
 volumes:
   pgdata:
+
+networks:
+  nestjs-network:
+    driver: bridge
