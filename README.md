@@ -11,6 +11,8 @@
 git clone {repository URL}
 ```
 
+## Switch and pull `dev-nodejs-service-part2` branch
+
 ## Installing NPM modules
 
 ```
