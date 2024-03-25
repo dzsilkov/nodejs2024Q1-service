@@ -1,11 +1,5 @@
 import { Track } from '@models';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { ArtistEntity } from '@artist/entities/artist.entity';
 import { AlbumEntity } from '@album/entities/album.entity';
 import { AbstractEntity } from '@database/abstract.entity';
