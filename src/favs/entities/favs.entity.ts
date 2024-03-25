@@ -8,12 +8,10 @@ import {
 import { ArtistEntity } from '@artist/entities/artist.entity';
 import { AlbumEntity } from '@album/entities/album.entity';
 import { TrackEntity } from '@track/entities/track.entity';
+import { AbstractEntity } from '@database/abstract.entity';
 
 @Entity()
-export class FavsEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class FavsEntity extends AbstractEntity<FavsEntity> {
   @Column('uuid')
   userId: string;
 

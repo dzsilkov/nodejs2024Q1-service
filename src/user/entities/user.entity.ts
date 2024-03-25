@@ -3,16 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { AbstractEntity } from '@database/abstract.entity';
 
 @Entity()
-export class UserEntity implements User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class UserEntity extends AbstractEntity<UserEntity> implements User {
   @Column()
   login: string;
 

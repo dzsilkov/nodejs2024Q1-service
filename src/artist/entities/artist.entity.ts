@@ -1,15 +1,12 @@
 import { Artist } from '@models';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { AbstractEntity } from '@database/abstract.entity';
 
 @Entity()
-export class ArtistEntity implements Artist {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class ArtistEntity
+  extends AbstractEntity<ArtistEntity>
+  implements Artist
+{
   @Column()
   name: string;
 

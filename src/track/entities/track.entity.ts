@@ -1,13 +1,17 @@
 import { Track } from '@models';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  UpdateDateColumn,
+} from 'typeorm';
 import { ArtistEntity } from '@artist/entities/artist.entity';
 import { AlbumEntity } from '@album/entities/album.entity';
+import { AbstractEntity } from '@database/abstract.entity';
 
 @Entity()
-export class TrackEntity implements Track {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class TrackEntity extends AbstractEntity<TrackEntity> implements Track {
   @Column()
   name: string;
 

@@ -1,9 +1,8 @@
 Dockerfile-app
-Dockerfile-pg
+Dockerfile-db
 .dockerignore
 node_modules
 npm-debug.log
-dist
 README.md
 .gitignore
 .env

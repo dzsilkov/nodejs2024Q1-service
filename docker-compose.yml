@@ -1,6 +1,19 @@
 version: '3.0'
 
 services:
+  postgres:
+    container_name: postgres
+    build:
+      dockerfile: Dockerfile-db
+    image: postgres:16-alpine
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
   app:
     container_name: app
     build:
@@ -19,28 +32,6 @@ services:
     depends_on:
       - postgres
     restart: always
-    networks:
-      - app_bridge
-
-  db_postgres:
-    container_name: db_postgres
-    build:
-      dockerfile: Dockerfile-pg
-    image: postgres:16
-    restart: always
-    environment:
-      - POSTGRES_USER=${TYPEORM_USERNAME}
-      - POSTGRES_PASSWORD=${TYPEORM_PASSWORD}
-      - POSTGRES_DB=${TYPEORM_DATABASE}
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
-    ports:
-      - ${TYPEORM_PORT}:${TYPEORM_PORT}
-    networks:
-      - app_bridge
 
 volumes:
   pgdata:
-
-networks:
-  app_bridge:

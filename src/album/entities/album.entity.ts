@@ -1,17 +1,10 @@
 import { Album } from '@models';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { ArtistEntity } from '@artist/entities/artist.entity';
+import { AbstractEntity } from '@database/abstract.entity';
 
 @Entity()
-export class AlbumEntity implements Album {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class AlbumEntity extends AbstractEntity<AlbumEntity> implements Album {
   @Column()
   name: string;
 
