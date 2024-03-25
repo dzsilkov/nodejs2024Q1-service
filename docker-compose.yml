@@ -12,7 +12,7 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - ${POSTGRES_PORT}:${POSTGRES_INNER_PORT}
     networks:
       - nestjs-network
 

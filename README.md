@@ -17,10 +17,20 @@ git clone {repository URL}
 npm install
 ```
 
-## Running application
+## Create .env file from .env.example
 
 ```
-npm start
+.env.example -> .env
+```
+
+## Running application
+
+first have to build docker container.
+
+then have to up the container
+
+```
+npm run start:docker
 ```
 
 After starting the app on port (4000 as default) you can open
