@@ -67,6 +67,12 @@ To run only specific test suite with authorization
 npm run test:auth -- <path to suite>
 ```
 
+### Scan images for vulnerabilities.
+
+```
+npm run scout <image>
+```
+
 ### Auto-fix and format
 
 ```
