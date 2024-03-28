@@ -13,32 +13,32 @@ services:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_INNER_PORT}
-    networks:
-      - nestjs-network
+#    networks:
+#      - nestjs-network
 
-  main:
-    container_name: main
-    build:
-      context: .
-      dockerfile: Dockerfile-app
-    env_file:
-      .env
-    volumes:
-      - .:/app
-      - /app/node_modules
-
-    ports:
-      - ${PORT}:${PORT}
-    depends_on:
-      - postgres
-    restart: always
-
-    networks:
-      - nestjs-network
-
-volumes:
-  pgdata:
-
-networks:
-  nestjs-network:
-    driver: bridge
+#  main:
+#    container_name: main
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-app
+#    env_file:
+#      .env
+#    volumes:
+#      - .:/app
+#      - /app/node_modules
+#
+#    ports:
+#      - ${PORT}:${PORT}
+#    depends_on:
+#      - postgres
+#    restart: always
+#
+#    networks:
+#      - nestjs-network
+#
+#volumes:
+#  pgdata:
+#
+#networks:
+#  nestjs-network:
+#    driver: bridge
