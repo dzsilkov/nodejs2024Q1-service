@@ -3,12 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  OneToMany,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
 import { AbstractEntity } from '@database/abstract.entity';
+import { TokenEntity } from '@auth/entities/token.entity';
 
-@Entity()
+@Entity('users')
 export class UserEntity extends AbstractEntity<UserEntity> implements User {
   @Column()
   login: string;
@@ -18,6 +21,10 @@ export class UserEntity extends AbstractEntity<UserEntity> implements User {
 
   @VersionColumn()
   version: number;
+
+  @OneToMany(() => TokenEntity, (token) => token.user)
+  // @JoinTable()
+  token: TokenEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

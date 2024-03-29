@@ -5,6 +5,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from '@user/user.module';
 import { jwtModuleAsyncOptions } from '@auth/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TokenEntity } from '@auth/entities/token.entity';
 
 @Module({
   controllers: [AuthController],
@@ -13,6 +15,7 @@ import { jwtModuleAsyncOptions } from '@auth/config';
     PassportModule,
     JwtModule.registerAsync(jwtModuleAsyncOptions()),
     UserModule,
+    TypeOrmModule.forFeature([TokenEntity]),
   ],
 })
 export class AuthModule {}

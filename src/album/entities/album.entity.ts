@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { ArtistEntity } from '@artist/entities/artist.entity';
 import { AbstractEntity } from '@database/abstract.entity';
 
-@Entity()
+@Entity('albums')
 export class AlbumEntity extends AbstractEntity<AlbumEntity> implements Album {
   @Column()
   name: string;

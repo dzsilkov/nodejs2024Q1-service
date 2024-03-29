@@ -4,7 +4,7 @@ import { AlbumEntity } from '@album/entities/album.entity';
 import { TrackEntity } from '@track/entities/track.entity';
 import { AbstractEntity } from '@database/abstract.entity';
 
-@Entity()
+@Entity('favs')
 export class FavsEntity extends AbstractEntity<FavsEntity> {
   @Column('uuid')
   userId: string;

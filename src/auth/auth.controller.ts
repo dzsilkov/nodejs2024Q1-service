@@ -4,9 +4,14 @@ import {
   Body,
   ValidationPipe,
   BadRequestException,
+  Res,
+  HttpStatus,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto, SignupUserDto } from '@auth/dto';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -49,7 +54,12 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refresh() {
-    return this.authService.refresh();
+  async refresh(@Res() res: Response, @Req() req: Request) {
+    const accessToken = this.authService.extractTokenFromHeader(req);
+    if (!accessToken) {
+      throw new UnauthorizedException();
+    }
+    const token = await this.authService.refresh(accessToken);
+    res.status(HttpStatus.CREATED).json({ accessToken: token.accessToken });
   }
 }

@@ -2,7 +2,7 @@ import { Artist } from '@models';
 import { Column, Entity } from 'typeorm';
 import { AbstractEntity } from '@database/abstract.entity';
 
-@Entity()
+@Entity('artists')
 export class ArtistEntity
   extends AbstractEntity<ArtistEntity>
   implements Artist

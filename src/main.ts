@@ -14,7 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   const configService = app.get(ConfigService);
-  const PORT = configService.get<number>('PORT') ?? DEFAULT_PORT;
+  const PORT = configService.get<number>('PORT', DEFAULT_PORT);
   app.useGlobalFilters(new HttpExceptionFilter());
   const swaggerYamlFile = await readFile(swaggerYamlFilePath, 'utf8');
   const swaggerDocument = yaml.parse(swaggerYamlFile);
