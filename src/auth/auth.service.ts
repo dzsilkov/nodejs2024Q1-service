@@ -1,26 +1,50 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UserService } from '@user/user.service';
+import { LoginUserDto, SignupUserDto } from '@auth/dto';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
+  async signup(signupUserDto: SignupUserDto) {
+    const loginExist = await this.userService.findOneByLogin(
+      signupUserDto.login,
+    );
+    if (loginExist) {
+      throw new ConflictException(
+        `Login \'${signupUserDto.login}\' already exist`,
+      );
+    }
+    return await this.userService.create(signupUserDto);
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async login({ login, password }: LoginUserDto) {
+    const user = await this.userService.findOneByLogin(login);
+    if (!user || !this.userService.comparePassword(password, user.password)) {
+      throw new ForbiddenException('Incorrect login or password');
+    }
+    const payload = {
+      userId: user.id,
+      login,
+    };
+    const accessToken = `Bearer ${this.jwtService.sign(payload)}`;
+    const refreshToken = this.getRefreshToken(payload);
+    console.log(refreshToken);
+    return { accessToken };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  getRefreshToken(payload) {
+    return this.jwtService.sign(payload);
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  refresh() {
+    return `This action returns a # auth`;
   }
 }

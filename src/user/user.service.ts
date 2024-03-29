@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { compareSync, hash } from 'bcryptjs';
+import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { plainToInstance } from 'class-transformer';
@@ -26,10 +26,7 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const hashPassword = await hash(
-      createUserDto.password,
-      HASH_SALT_OF_ROUNDS,
-    );
+    const hashPassword = this.hashPassword(createUserDto.password);
 
     const createUser = this.userRepository.create({
       ...createUserDto,
@@ -50,12 +47,21 @@ export class UserService {
     );
   }
 
-  async findOne(userId: string) {
+  async findOneById(userId: string) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
     return plainToInstance<ResponseUserDto, UserEntity>(ResponseUserDto, user);
+  }
+
+  async findOneByLogin(login: string) {
+    const user = await this.userRepository.findOne({ where: { login } });
+    if (!user) {
+      throw new NotFoundException(`User with login ${login} not found`);
+    }
+    return user;
+    // return plainToInstance<ResponseUserDto, UserEntity>(ResponseUserDto, user);
   }
 
   async remove(userId: string) {
@@ -74,12 +80,12 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
-    const comparePassword = compareSync(oldPassword, user.password);
+    const comparePassword = this.comparePassword(oldPassword, user.password);
 
     if (!comparePassword) {
       throw new ForbiddenException('The old password is wrong');
     }
-    const hashPassword = await hash(newPassword, HASH_SALT_OF_ROUNDS);
+    const hashPassword = this.hashPassword(newPassword);
     const updatedUser = await this.userRepository.save({
       ...user,
       password: hashPassword,
@@ -88,5 +94,13 @@ export class UserService {
       ResponseUserDto,
       updatedUser,
     );
+  }
+
+  private hashPassword(password: string): string {
+    return hashSync(password, genSaltSync(HASH_SALT_OF_ROUNDS));
+  }
+
+  comparePassword(password: string, passwordHash: string): boolean {
+    return compareSync(password, passwordHash);
   }
 }

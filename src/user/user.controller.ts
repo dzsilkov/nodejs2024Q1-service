@@ -45,7 +45,7 @@ export class UserController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    return this.userService.findOne(id);
+    return this.userService.findOneById(id);
   }
 
   @Put(':id')

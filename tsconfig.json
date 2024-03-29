@@ -26,6 +26,7 @@
       "@user/*": ["./src/user/*"],
       "@favs/*": ["./src/favs/*"],
       "@database/*": ["./src/database/*"],
+      "@auth/*": ["./src/auth/*"],
     }
   }
 }

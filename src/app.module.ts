@@ -8,7 +8,7 @@ import { AlbumModule } from '@album/album.module';
 import { FavsModule } from '@favs/favs.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from '@database/database.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 
 @Module({
   imports: [
