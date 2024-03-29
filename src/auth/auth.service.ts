@@ -36,11 +36,11 @@ export class AuthService {
     };
     const accessToken = `Bearer ${this.jwtService.sign(payload)}`;
     const refreshToken = this.getRefreshToken(payload);
-    console.log(refreshToken);
-    return { accessToken };
+
+    return { accessToken, refreshToken };
   }
 
-  getRefreshToken(payload) {
+  private getRefreshToken(payload) {
     return this.jwtService.sign(payload);
   }
 

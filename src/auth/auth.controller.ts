@@ -39,13 +39,13 @@ export class AuthController {
     )
     loginUserDto: LoginUserDto,
   ) {
-    const token = await this.authService.login(loginUserDto);
-    if (!token) {
+    const tokens = await this.authService.login(loginUserDto);
+    if (!tokens) {
       new BadRequestException(
         'Bad request. Body does not contain required fields or data is incorrect',
       );
     }
-    return token;
+    return { accessToken: tokens.accessToken };
   }
 
   @Post('refresh')
