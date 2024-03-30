@@ -12,7 +12,9 @@ import {
 import { AuthService } from './auth.service';
 import { LoginUserDto, SignupUserDto } from '@auth/dto';
 import { Request, Response } from 'express';
+import { Public } from '@shared/decorators';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

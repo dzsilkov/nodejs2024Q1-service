@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TokenEntity } from '@auth/entities/token.entity';
 import { Request } from 'express';
+import { JwtPayload } from '@models';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
   }
 
   private async generateToken({ id, login }) {
-    const payload = {
+    const payload: JwtPayload = {
       userId: id,
       login,
     };
