@@ -1,0 +1,15 @@
+export interface User {
+  id: string; // uuid v4
+  login: string;
+  password: string;
+  version: number; // integer number, increments on update
+  createdAt: number; // timestamp of creation
+  updatedAt: number; // timestamp of last update
+}
+
+export type ResponseUser = Omit<User, 'password'>;
+
+export interface UpdateUserPassword {
+  oldPassword: string;
+  newPassword: string;
+}
