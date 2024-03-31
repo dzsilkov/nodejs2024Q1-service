@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { TokenEntity } from '@auth/entities/token.entity';
 import { Request } from 'express';
 import { JwtPayload } from '@models';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -19,19 +20,10 @@ export class AuthService {
     private authRepository: Repository<TokenEntity>,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
   async signup(signupUserDto: SignupUserDto) {
-    // const loginExist = await this.userService.findOneByLogin(
-    //   signupUserDto.login,
-    // );
-    // if (loginExist) {
-    //   throw new ConflictException(
-    //     `Login \'${signupUserDto.login}\' already exist`,
-    //   );
-    // }
-    const user = await this.userService.create(signupUserDto);
-    const tokens = await this.generateToken(user);
-    return { accessToken: tokens.accessToken };
+    return await this.userService.create(signupUserDto);
   }
 
   async login({ login, password }: LoginUserDto) {
@@ -39,7 +31,11 @@ export class AuthService {
     if (!user || !this.userService.comparePassword(password, user.password)) {
       throw new ForbiddenException('Incorrect login or password');
     }
-    return this.generateToken(user);
+    const { accessToken, refreshToken } = await this.generateToken(user);
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   private async generateToken({ id, login }) {
@@ -47,7 +43,7 @@ export class AuthService {
       userId: id,
       login,
     };
-    const accessToken = `Bearer ${this.jwtService.sign(payload)}`;
+    const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.getRefreshToken(payload);
 
     await this.authRepository.save(
@@ -63,7 +59,10 @@ export class AuthService {
   }
 
   private getRefreshToken(payload) {
-    return this.jwtService.sign(payload);
+    const expiresIn = this.configService.get('JWT_REFRESH_EXP');
+    return this.jwtService.sign(payload, {
+      expiresIn,
+    });
   }
 
   async refresh(refreshToken: string) {

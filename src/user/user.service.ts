@@ -8,10 +8,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { plainToInstance } from 'class-transformer';
 import { UserEntity } from './entities/user.entity';
-import { HASH_SALT_OF_ROUNDS } from '@shared/constants';
+import { DEFAULT_HASH_SALT } from '@shared/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ResponseUserDto } from '@user/dto/response-user.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,7 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private readonly configService: ConfigService,
   ) {}
 
   getUserId() {
@@ -97,7 +99,8 @@ export class UserService {
   }
 
   private hashPassword(password: string): string {
-    return hashSync(password, genSaltSync(HASH_SALT_OF_ROUNDS));
+    const cryptSalt = +this.configService.get('CRYPT_SALT', DEFAULT_HASH_SALT);
+    return hashSync(password, genSaltSync(cryptSalt));
   }
 
   comparePassword(password: string, passwordHash: string): boolean {
