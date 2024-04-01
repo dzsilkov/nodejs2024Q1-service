@@ -26,7 +26,6 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - app_logs:/logs
 
     ports:
       - ${PORT}:${PORT}
@@ -39,7 +38,6 @@ services:
 
 volumes:
   pgdata:
-  app_logs:
 
 networks:
   nestjs-network:
