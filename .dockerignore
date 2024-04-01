@@ -1,0 +1,8 @@
+Dockerfile-app
+Dockerfile-db
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.gitignore
+.env
