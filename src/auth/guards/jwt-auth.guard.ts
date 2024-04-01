@@ -5,7 +5,10 @@ import { isPublic } from '@shared/decorators';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
+export class JwtAuthGuard
+  extends AuthGuard('jwt-access')
+  implements CanActivate
+{
   constructor(private readonly reflector: Reflector) {
     super();
   }

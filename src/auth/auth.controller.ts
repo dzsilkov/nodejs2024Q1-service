@@ -6,13 +6,12 @@ import {
   BadRequestException,
   Res,
   HttpStatus,
-  Req,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { LoginUserDto, SignupUserDto } from '@auth/dto';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { Public } from '@shared/decorators';
+import { AuthService } from './auth.service';
+import { LoginUserDto, RefreshTokenDto, SignupUserDto } from './dto';
 
 @Public()
 @Controller('auth')
@@ -52,16 +51,18 @@ export class AuthController {
         'Bad request. Body does not contain required fields or data is incorrect',
       );
     }
-    return { accessToken: tokens.accessToken };
+    return tokens;
   }
 
   @Post('refresh')
-  async refresh(@Res() res: Response, @Req() req: Request) {
-    const accessToken = this.authService.extractTokenFromHeader(req);
-    if (!accessToken) {
+  async refresh(
+    @Body() { refreshToken }: RefreshTokenDto,
+    @Res() res: Response,
+  ) {
+    if (!refreshToken) {
       throw new UnauthorizedException();
     }
-    const token = await this.authService.refresh(accessToken);
-    res.status(HttpStatus.CREATED).json({ accessToken: token.accessToken });
+    const tokens = await this.authService.refresh(refreshToken);
+    res.status(HttpStatus.OK).json(tokens);
   }
 }
