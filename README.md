@@ -32,7 +32,13 @@ first have to build docker container.
 then have to up the container
 
 ```
-npm run start:docker
+npm run docker:up
+```
+
+to stop the container
+
+```
+npm run docker:down
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -46,7 +52,7 @@ After application running open new terminal and enter:
 To run all tests without authorization
 
 ```
-npm run test
+npm run test:auth
 ```
 
 To run only one of all test suites
@@ -59,12 +65,20 @@ To run all test with authorization
 
 ```
 npm run test:auth
+or
+docker exec -it main sh -c "npm run test:auth"
 ```
 
 To run only specific test suite with authorization
 
 ```
 npm run test:auth -- <path to suite>
+```
+
+### Scan images for vulnerabilities.
+
+```
+npm run scout <image>
 ```
 
 ### Auto-fix and format
