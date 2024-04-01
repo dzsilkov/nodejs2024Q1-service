@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule } from '@nestjs/swagger';
-import { HttpExceptionFilter } from './errors/http-exception-filter.class';
+import { HttpExceptionFilter } from './exception-filter/http-exception-filter.class';
 import * as yaml from 'yaml';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -20,7 +20,7 @@ async function bootstrap() {
   const logger = new MyLoggerService(configService);
   app.useLogger(logger);
 
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
   const swaggerYamlFile = await readFile(swaggerYamlFilePath, 'utf8');
   const swaggerDocument = yaml.parse(swaggerYamlFile);
 

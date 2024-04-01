@@ -1,13 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '@user/user.service';
-import { LoginUserDto, SignupUserDto } from '@auth/dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TokenEntity } from '@auth/entities/token.entity';
 import { JwtPayload, Tokens } from '@models';
 import { ConfigService } from '@nestjs/config';
-
+import { TokenEntity } from './entities/token.entity';
 @Injectable()
 export class AuthService {
   constructor(
@@ -97,3 +95,5 @@ export class AuthService {
     });
   }
 }
+
+import { LoginUserDto, SignupUserDto } from './dto';

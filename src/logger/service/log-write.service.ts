@@ -10,7 +10,7 @@ import {
   constants,
 } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { LogLevelValues } from '@logger/service/logger.service';
+import { LogLevelValues } from './types';
 
 @Injectable()
 export class LogWriteService {

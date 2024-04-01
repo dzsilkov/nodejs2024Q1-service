@@ -1,19 +1,11 @@
-import { Logger, Injectable, LoggerService } from '@nestjs/common';
+import { Injectable, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { LogWriteService } from '@logger/service/log-write.service';
+import { LogWriteService } from './../service/log-write.service';
 import { LOGGER_DEFAULT_LOG_LEVEL } from '@shared/constants';
-
-export enum LogLevelValues {
-  LOG,
-  ERROR,
-  WARN,
-  DEBUG,
-  VERBOSE,
-}
+import { LogLevelValues } from './../service/types';
 
 @Injectable()
 export class MyLoggerService implements LoggerService {
-  private readonly logger = new Logger(MyLoggerService.name);
   private readonly logWriteService = new LogWriteService(this.configService);
   private loggerLogLevel = this.configService.get<number>(
     'LOGGER_LOG_LEVEL',
