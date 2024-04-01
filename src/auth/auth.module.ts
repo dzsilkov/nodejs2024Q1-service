@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from '@user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './auth.service';
@@ -9,11 +9,13 @@ import { jwtModuleAsyncOptions } from './config';
 import { TokenEntity } from './entities/token.entity';
 import { strategies } from './strategies';
 import { guards } from './guards';
+import { LoggerModule } from '@logger/logger.module';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService, ...strategies, ...guards],
   imports: [
+    LoggerModule,
     PassportModule,
     JwtModule.registerAsync(jwtModuleAsyncOptions()),
     UserModule,

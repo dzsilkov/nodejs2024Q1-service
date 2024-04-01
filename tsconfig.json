@@ -27,6 +27,7 @@
       "@favs/*": ["./src/favs/*"],
       "@database/*": ["./src/database/*"],
       "@auth/*": ["./src/auth/*"],
+      "@logger/*": ["./src/logger/*"],
     }
   }
 }
