@@ -21,9 +21,9 @@ async function bootstrap() {
   app.useLogger(logger);
 
   app.useGlobalFilters(new HttpExceptionFilter(logger));
+
   const swaggerYamlFile = await readFile(swaggerYamlFilePath, 'utf8');
   const swaggerDocument = yaml.parse(swaggerYamlFile);
-
   const swaggerEndpoint = configService.get<string>(
     'SWAGGER_API_ENDPOINT',
     DEFAULT_SWAGGER_API_ENDPOINT,
@@ -34,6 +34,7 @@ async function bootstrap() {
     const message =
       error instanceof Error ? error.message : JSON.stringify(error);
     logger.error(`Uncaught Exception: ${message}`);
+    process.exit(1);
   });
 
   process.on('unhandledRejection', (error) => {

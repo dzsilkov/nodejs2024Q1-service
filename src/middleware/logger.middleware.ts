@@ -14,8 +14,6 @@ export class LoggerMiddleware implements NestMiddleware {
       const requestBody = `, body: ${JSON.stringify(body)}`;
       const message = `REQUEST: ${url}${queryParams}${requestBody}; RESPONSE: status code ${statusCode}`;
 
-      // this.loggerService.log(message);
-
       if (statusCode >= 500) {
         this.loggerService.error(message);
       } else if (statusCode >= 400) {

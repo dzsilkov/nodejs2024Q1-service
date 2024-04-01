@@ -191,12 +191,10 @@ paths:
                 - login
                 - password
       responses:
-        204:
+        201:
           description: Successful signup
         400:
           description: Bad request. Body does not contain required fields or data is incorrect
-        409:
-          description: Login 'Login' already exist
   /user:
     get:
       tags:
@@ -212,8 +210,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - User
@@ -245,8 +243,8 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           description: Bad request. Body does not contain required fields
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /user/{userId}:
     parameters:
       - name: userId
@@ -268,8 +266,8 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: User with ID {id} not found
 
@@ -321,8 +319,8 @@ paths:
                     example: 1655999999
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         403:
           description: The old password is wrong
         404:
@@ -338,8 +336,8 @@ paths:
           description: User with {id} removed
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: User with ID {id} not found
   /track:
@@ -357,8 +355,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Track'
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - Track
@@ -396,8 +394,8 @@ paths:
                 $ref: '#/components/schemas/Track'
         400:
           description: Bad request. Body does not contain required fields
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /track/{id}:
     parameters:
       - name: id
@@ -420,8 +418,8 @@ paths:
                 $ref: '#/components/schemas/Track'
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Track with ID {id} not found.
     put:
@@ -481,8 +479,8 @@ paths:
                     nullable: true
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Track with ID {id} not found..
     delete:
@@ -514,8 +512,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Album'
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - Album
@@ -550,8 +548,8 @@ paths:
                 $ref: '#/components/schemas/Album'
         400:
           description: Bad request. Body does not contain required fields
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /album/{id}:
     parameters:
       - name: id
@@ -574,8 +572,8 @@ paths:
                 $ref: '#/components/schemas/Album'
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Album with ID {id} not found.
     put:
@@ -609,8 +607,8 @@ paths:
                 $ref: '#/components/schemas/Album'
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Album with ID {id} not found.
     delete:
@@ -623,8 +621,8 @@ paths:
           description: Deleted successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Album with ID {id} not found.
   /artist:
@@ -642,8 +640,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Artist'
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - Artist
@@ -672,8 +670,8 @@ paths:
                 $ref: '#/components/schemas/Artist'
         400:
           description: Bad request. Body does not contain required fields
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /artist/{id}:
     parameters:
       - name: id
@@ -696,8 +694,8 @@ paths:
                 $ref: '#/components/schemas/Artist'
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Artist with ID {id} not found.
     put:
@@ -726,8 +724,8 @@ paths:
                 $ref: '#/components/schemas/Artist'
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Artist with ID {id} not found.
     delete:
@@ -740,8 +738,8 @@ paths:
           description: Deleted successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Artist with ID {id} not found.
   /favs:
@@ -757,8 +755,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Favorites'
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /favs/track/{id}:
     parameters:
       - name: id
@@ -777,8 +775,8 @@ paths:
           description: Added successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         422:
           description: Track with id {id} doesn't exist
     delete:
@@ -791,8 +789,8 @@ paths:
           description: Deleted successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Track was not found.
   /favs/album/{id}:
@@ -813,8 +811,8 @@ paths:
           description: Added successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         422:
           description: Album with id {id} doesn't exist.
     delete:
@@ -827,8 +825,8 @@ paths:
           description: Deleted successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Album was not found.
   /favs/artist/{id}:
@@ -849,8 +847,8 @@ paths:
           description: Added successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         422:
           description: Artist with id {id} doesn't exist
     delete:
@@ -863,7 +861,7 @@ paths:
           description: Deleted successfully
         400:
           description: Validation failed (uuid v 4 is expected)
-#        401:
-#          $ref: '#/components/responses/UnauthorizedError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Artist was not found.

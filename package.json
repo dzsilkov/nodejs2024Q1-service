@@ -13,8 +13,6 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "start:docker": "docker-compose build && docker-compose up",
-    "scout": "docker scout cves",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --testPathIgnorePatterns refresh.e2e.spec.ts --noStackTrace --runInBand",
     "test:auth": "cross-env TEST_MODE=auth jest --testPathIgnorePatterns refresh.e2e.spec.ts --noStackTrace --runInBand",
@@ -26,7 +24,12 @@
     "migration:run": "npm run build && npm run typeorm migration:run -- -d ./src/database/typeorm/typeorm.config.ts",
     "migration:generate": "npm run build && npm run typeorm -- -d ./src/database/typeorm/typeorm.config.ts migration:generate ./src/database/typeorm/migrations/%npm_config_name%",
     "migration:create": "npm run build && npm run typeorm -- migration:create ./src/database/typeorm/migrations/init",
-    "migration:revert": "npm run typeorm -- -d ./src/database/typeorm/typeorm.config.ts migration:revert"
+    "migration:revert": "npm run typeorm -- -d ./src/database/typeorm/typeorm.config.ts migration:revert",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:push": "docker-compose build && docker-compose push",
+    "docker:scout": "docker scout cves"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.3",
